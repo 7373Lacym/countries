@@ -34,12 +34,13 @@ class Search extends React.Component {
             if (this.state.currentSearchString && this.state.currentSearchString.length > 1) {
                 if (this.state.currentSearchString.length % 2 === 0) {
                     this.hitSearch();
-                    this.countRegions();
                 }
             } else {
                 this.setState({
                     countries: [],
-                    numResults: 0
+                    numResults: 0,
+                    regions: [],
+                    subregions: []
                 })
             }
         })
@@ -53,6 +54,7 @@ class Search extends React.Component {
                     countries: response.data,
                     numResults: response.data.length
                 });
+                this.countRegions();
             } else {
                 this.setState({
                     countries: [],
@@ -115,16 +117,29 @@ class FooterView extends Component {
 
     renderRegions(){
         if(this.props.regions){
-            
+            let regions = Array.from(this.props.regions);
+            return  regions.map(function (element) {
+                return <span key={element}> {element.join(': ') + " "} </span>
+            })
+        }
+    }
+    renderSubregions(){
+        if(this.props.subregions){
+            let subregions = Array.from(this.props.regions);
+            return subregions.map(function (element) {
+                return <span key={element}> {element.join(': ') + " "} </span>
+            })
         }
     }
 
     render(){
         let regionSection = this.renderRegions();
+        let subregionSection = this.renderSubregions();
         return(
             <div>
-            <footer className="footer"> {this.props.count} Results
-                 Region breakdown: {regionSection}
+            <footer className="footer"> {this.props.count} Results <br/>
+                Regions: {regionSection} <br/>
+                Subregions: {subregionSection} <br/>
             </footer>
 
             </div>
